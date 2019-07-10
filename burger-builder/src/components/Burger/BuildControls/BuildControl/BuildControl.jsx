@@ -6,9 +6,9 @@ const BuildControl = (props) => {
     <div className={style.BuildControl}>
       <div className={style.Label}>{props.label}</div>
       <button className={style.Less}
-              onClick={() => props.handleRemoveIngredient(props.type)}>Less</button>
+              onClick={() => props.handleRemoveIngredient(props.type)}><strong>-</strong></button>
       <button className={style.More}
-              onClick={() => props.handleAddIngredient(props.type)}>More</button>
+              onClick={() => props.handleAddIngredient(props.type)}><strong>+</strong></button>
     </div>
   )
 }
