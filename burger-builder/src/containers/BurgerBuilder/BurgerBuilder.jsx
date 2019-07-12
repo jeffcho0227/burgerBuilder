@@ -31,6 +31,7 @@ class BurgerBuilder extends Component {
     this.handleRemoveIngredient = this.handleRemoveIngredient.bind(this);
     this.updatePurchaseStatus = this.updatePurchaseStatus.bind(this);
     this.handlePurchase = this.handlePurchase.bind(this);
+    this.modalClosed = this.modalClosed.bind(this);
   }
 
   updatePurchaseStatus(ingredients) {
@@ -82,17 +83,24 @@ class BurgerBuilder extends Component {
     this.updatePurchaseStatus(updatedIngredients);
   }
 
+  //handle show modal
   handlePurchase () {
-    console.log('here')
     this.setState({
       purchasing: true
+    })
+  }
+
+  //handle close modal when click on backdrop
+  modalClosed () {
+    this.setState({
+      purchasing: false
     })
   }
 
   render() {
     return (
       <Aux>
-        <Modal show={this.state.purchasing}>
+        <Modal show={this.state.purchasing} modalClosed={this.modalClosed}>
           <OrderSummary ingredients={this.state.ingredients}/>
         </Modal>
         <Burger ingredients={this.state.ingredients}/>
