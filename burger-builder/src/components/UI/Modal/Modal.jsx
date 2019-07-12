@@ -4,6 +4,7 @@ import Aux from '../../../hoc/Aux.jsx';
 import Backdrop from '../Backdrop/Backdrop.jsx';
 
 const Modal = props => {
+  console.log(props.children, 'this is props.children from modal')
   return (
     <Aux>
       <Backdrop show={props.show} modalClosed={props.modalClosed}/>
