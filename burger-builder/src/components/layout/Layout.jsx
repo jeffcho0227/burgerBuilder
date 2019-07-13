@@ -13,6 +13,15 @@ export default class Layout extends React.Component {
     }
 
     this.handleSideDrawerClose = this.handleSideDrawerClose.bind(this);
+    this.drawerToggleClicked = this.drawerToggleClicked.bind(this);
+  }
+
+  drawerToggleClicked() {
+    this.setState((prevState) => {
+      return {
+        showSideDrawer: !prevState.showSideDrawer
+      }
+    });
   }
 
   handleSideDrawerClose () {
@@ -24,7 +33,7 @@ export default class Layout extends React.Component {
   render() {
     return(
       <Aux>
-        <Toolbar />
+        <Toolbar drawerToggleClicked={this.drawerToggleClicked}/>
         <SideDrawer show={this.state.showSideDrawer} handleSideDrawerClose={this.handleSideDrawerClose}/>
         <main className={style.Content}>
           { this.props.children }
