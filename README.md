@@ -3,7 +3,7 @@ Creating a burger builder application with React. Practice on React Redux and Re
 
 ## How to start the app
 ```
-//cd in the the main directory 
+//cd into the the main directory 
 
 npm start 
 ```
