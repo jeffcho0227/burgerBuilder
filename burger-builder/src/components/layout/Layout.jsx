@@ -5,14 +5,32 @@ import Toolbar from '../Navigation/Toolbar/Toolbar.jsx';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer.jsx';
 
 
-const Layout = ( props ) => (
-  <Aux>
-      <Toolbar />
-      <SideDrawer />
-      <main className={style.Content}>
-        { props.children }
-      </main>
-  </Aux>
-);
+export default class Layout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSideDrawer: true
+    }
 
-export default Layout;
+    this.handleSideDrawerClose = this.handleSideDrawerClose.bind(this);
+  }
+
+  handleSideDrawerClose () {
+    this.setState({
+      showSideDrawer: false
+    })
+  }
+
+  render() {
+    return(
+      <Aux>
+        <Toolbar />
+        <SideDrawer show={this.state.showSideDrawer} handleSideDrawerClose={this.handleSideDrawerClose}/>
+        <main className={style.Content}>
+          { this.props.children }
+        </main>
+      </Aux>
+    )
+  }
+}
+
