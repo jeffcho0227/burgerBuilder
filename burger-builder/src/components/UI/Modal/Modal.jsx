@@ -26,6 +26,7 @@ export default class Modal extends React.Component {
               opacity: this.props.show ? '1' : '0.5'
             }}>
         {this.props.children}
+        
       </div>
     </Aux>
     )
