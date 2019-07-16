@@ -20,12 +20,7 @@ class BurgerBuilder extends Component {
   constructor() {
     super();
     this.state = {
-      ingredients: {
-        salad: 0,
-        bacon: 0, 
-        cheese: 0,
-        meat: 0
-      },
+      ingredients: null,
       totalPrice: 3,
       purchasable: false,
       purchasing: false,
@@ -37,6 +32,18 @@ class BurgerBuilder extends Component {
     this.handlePurchase = this.handlePurchase.bind(this);
     this.modalClosed = this.modalClosed.bind(this);
     this.purchaseContinueHandler = this.purchaseContinueHandler.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(this.props)
+    axios
+    .get('https://react-burgerbuilder-app-7d0f6.firebaseio.com/Ingredients.json')
+    .then( ({data}) => {
+      this.setState({
+        ingredients: data
+      })
+    })
+    .catch(err => console.error(err));
   }
 
   updatePurchaseStatus(ingredients) {
@@ -90,40 +97,40 @@ class BurgerBuilder extends Component {
 
   purchaseContinueHandler() {
     
-    this.setState({
-      loading: true
-    })
+    // this.setState({
+    //   loading: true
+    // })
 
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Jeff C',
-        address: {
-          street: '123 testtest',
-          zipCode: '48823',
-          country: 'USA'
-        },
-        email: 'test@gmail.com'
-      },
-      delieverMethod: 'fastest'
-    };
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Jeff C',
+    //     address: {
+    //       street: '123 testtest',
+    //       zipCode: '48823',
+    //       country: 'USA'
+    //     },
+    //     email: 'test@gmail.com'
+    //   },
+    //   delieverMethod: 'fastest'
+    // };
 
-    axios
-      .post('/orders.json', order)
-      .then( data => {
-        this.setState({
-          loading: false,
-          purchasing: false
-        })
-      } )
-      .catch( err => {
-        this.setState({
-          loading: false,
-          purchasing: false
-        })
-      });
-
+    // axios
+    //   .post('/orders.json', order)
+    //   .then( data => {
+    //     this.setState({
+    //       loading: false,
+    //       purchasing: false
+    //     })
+    //   } )
+    //   .catch( err => {
+    //     this.setState({
+    //       loading: false,
+    //       purchasing: false
+    //     })
+    //   });
+    this.props.history.push('/checkout')
 
   }
 
@@ -150,28 +157,40 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0
     }
 
-    let orderSummary = <OrderSummary ingredients={this.state.ingredients}
-        purchaseContinueHandler={this.purchaseContinueHandler}
-        modalClosed={this.modalClosed}
-        price={this.state.totalPrice}/>
+    let orderSummary = null;
 
     if (this.state.loading) {
       orderSummary = <Spinner />
     }
 
+    let burger = <Spinner />
+
+    if (this.state.ingredients) {
+      burger = (
+        <Aux>
+          <Burger ingredients={this.state.ingredients}/>
+          <BuildControls 
+                  price={this.state.totalPrice}
+                  handleAddIngredient={this.handleAddIngredient}
+                  handleRemoveIngredient={this.handleRemoveIngredient}
+                  handlePurchase={this.handlePurchase}
+                  purchasable={this.state.purchasable} 
+                  />
+        </Aux>
+      );
+
+      orderSummary = <OrderSummary ingredients={this.state.ingredients}
+                        purchaseContinueHandler={this.purchaseContinueHandler}
+                        modalClosed={this.modalClosed}
+                        price={this.state.totalPrice}/>
+    }
+  
     return (
       <Aux>
         <Modal show={this.state.purchasing} modalClosed={this.modalClosed}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients}/>
-        <BuildControls 
-                price={this.state.totalPrice}
-                handleAddIngredient={this.handleAddIngredient}
-                handleRemoveIngredient={this.handleRemoveIngredient}
-                handlePurchase={this.handlePurchase}
-                purchasable={this.state.purchasable} 
-                />
+        {burger}
       </Aux>
     );
   }
