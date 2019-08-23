@@ -21,6 +21,7 @@ class ContactData extends React.Component {
 
   orderHandler (e) {
     e.preventDefault();
+    console.log(this.props.ingredients);
     this.setState({
       loading: true
     });
@@ -44,29 +45,34 @@ class ContactData extends React.Component {
       .post('/orders.json', order)
       .then( data => {
         this.setState({
-          loading: false,
-          purchasing: false
+          loading: false
         })
+        this.props.history.push('/');
       } )
       .catch( err => {
         this.setState({
-          loading: false,
-          purchasing: false
+          loading: false
         })
       });
   }
 
   render() {
-    return(
-      <div className={style.ContactData}>
-        <h4>Enter your contact</h4>
+    let form = (
         <form>
           <input className={style.Input} type="text" name="name" placeholder="Name"/>
           <input className={style.Input} type="email" name="email" placeholder="email"/>
           <input className={style.Input} type="text" name="street" placeholder="Street"/>
           <input className={style.Input} type="text" name="postalCode" placeholder="postalCode"/>
           <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
-        </form>
+      </form>
+    );
+    if (this.state.loading) {
+      form = <Spinner />
+    }
+    return(
+      <div className={style.ContactData}>
+        <h4>Enter your contact</h4>
+        {form}
       </div>
     )
   }

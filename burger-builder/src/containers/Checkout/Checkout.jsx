@@ -24,7 +24,7 @@ class Checkout extends React.Component {
       if (param[0] === 'price') {
         price = param[1];
       } else {
-        ingredients[param[0]] = +param[1];
+        ingredients[param[0]] =+ param[1];
       }
     }
     this.setState({
@@ -39,6 +39,7 @@ class Checkout extends React.Component {
   }
 
   checkoutContinuedHandler() {
+    //replace the current route with this route
     this.props.history.replace('/checkout/contact-data');
   }
 
@@ -50,7 +51,8 @@ class Checkout extends React.Component {
                           checkoutCancelled={this.checkoutCancelledHandler}
                           chceckoutContinue={this.checkoutContinuedHandler}/>
         <Route path={this.props.match.url + '/contact-data'} 
-               render={() => {return <ContactData ingredients={this.state.ingredients} price={this.state.totalPrice}/>}}/>
+                //redner method in the route can pass the ingredients to contactData Component
+               render={(props) => {return <ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} {...props}/>}}/>
         
       </div>
     )
