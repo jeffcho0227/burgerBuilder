@@ -16,7 +16,11 @@ class ContactData extends React.Component {
               type: 'text',
               placeholder: 'Name'
             }, 
-            value: ''
+            value: '',
+            validation: {
+              require: true
+            }, 
+            valid: false
           },
           street: {
             elementType: 'input',
@@ -24,7 +28,11 @@ class ContactData extends React.Component {
               type: 'text',
               placeholder: 'Street'
             }, 
-            value: ''
+            value: '',
+            validation: {
+              require: true
+            },
+            valid: false
           },
           zipCode: {
             elementType: 'input',
@@ -32,7 +40,12 @@ class ContactData extends React.Component {
               type: 'text',
               placeholder: 'Zip Code'
             }, 
-            value: ''
+            value: '',
+            validation: {
+              require: true,
+              minLen: 5
+            },
+            valid: false
           },
           country: {
             elementType: 'input',
@@ -40,7 +53,11 @@ class ContactData extends React.Component {
               type: 'text',
               placeholder: 'Country'
             }, 
-            value: ''
+            value: '',
+            validation: {
+              require: true
+            },
+            valid: false
           },
           email: {
             elementType: 'input',
@@ -48,7 +65,11 @@ class ContactData extends React.Component {
               type: 'email',
               placeholder: 'Email'
             }, 
-            value: ''
+            value: '',
+            validation: {
+              require: true
+            },
+            valid: false
           },
           delieverMethod: {
             elementType: 'select',
@@ -66,6 +87,21 @@ class ContactData extends React.Component {
     };
     this.orderHandler = this.orderHandler.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.checkValidity = this.checkValidity.bind(this);
+  }
+
+  checkValidity(value, rules) {
+    let isValid = false;
+    console.log(value);
+    if (rules.require) {
+      isValid = value.trim() !== '';
+    }
+
+    if (rules.minLen) { 
+      isValid = value.length >= rules.minLen;
+    }
+
+    return isValid;
   }
 
   handleInputChange(e, id) {
@@ -78,9 +114,10 @@ class ContactData extends React.Component {
     };
 
     updatedFormTarget.value = e.target.value;
+    updatedFormTarget.valid = this.checkValidity(updatedFormTarget.value, updatedFormTarget.validation)
     updatedForm[id] = updatedFormTarget;
 
-    console.log(id);
+    console.log(updatedFormTarget);
 
     this.setState({
       orderForm: updatedForm
