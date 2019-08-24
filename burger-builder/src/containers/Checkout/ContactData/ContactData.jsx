@@ -91,14 +91,14 @@ class ContactData extends React.Component {
   }
 
   checkValidity(value, rules) {
-    let isValid = false;
-    console.log(value);
+    let isValid = true;
+    
     if (rules.require) {
-      isValid = value.trim() !== '';
+      isValid = value.trim() !== '' && isValid;
     }
 
     if (rules.minLen) { 
-      isValid = value.length >= rules.minLen;
+      isValid = value.length >= rules.minLen && isValid;
     }
 
     return isValid;
@@ -178,6 +178,7 @@ class ContactData extends React.Component {
                           value={formElement.config.value}
                           key={formElement.id}
                           id={formElement.id}
+                          invalid={!formElement.config.valid}
                           change={this.handleInputChange}/>
           })}
           <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
