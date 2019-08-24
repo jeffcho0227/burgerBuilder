@@ -3,42 +3,109 @@ import Button from '../../../components/UI/Button/Button.jsx';
 import style from './ContactData.css';
 import axios from '../../../axios-order.js';
 import Spinner from '../../../components/UI/Spinner/Spinner.jsx';
+import Input from '../../../components/UI/Input/Input.jsx';
 
 class ContactData extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      name: '',
-      email: '',
-      address: {
-        street: '',
-        postalCode: ''
+      orderForm: {
+          name: {
+            elementType: 'input',
+            elementConfig: {
+              type: 'text',
+              placeholder: 'Name'
+            }, 
+            value: ''
+          },
+          street: {
+            elementType: 'input',
+            elementConfig: {
+              type: 'text',
+              placeholder: 'Street'
+            }, 
+            value: ''
+          },
+          zipCode: {
+            elementType: 'input',
+            elementConfig: {
+              type: 'text',
+              placeholder: 'Zip Code'
+            }, 
+            value: ''
+          },
+          country: {
+            elementType: 'input',
+            elementConfig: {
+              type: 'text',
+              placeholder: 'Country'
+            }, 
+            value: ''
+          },
+          email: {
+            elementType: 'input',
+            elementConfig: {
+              type: 'email',
+              placeholder: 'Email'
+            }, 
+            value: ''
+          },
+          delieverMethod: {
+            elementType: 'select',
+            elementConfig: {
+              options: [
+                {value: 'fatest', displayValue: 'Fastest'},
+                {value: 'cheapest', displayValue: 'Cheapest'}
+              ]
+            }, 
+            value: 'fatest'
+          }
+
       },
       loading: false
     };
     this.orderHandler = this.orderHandler.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(e, id) {
+    let updatedForm = {
+      ...this.state.orderForm
+    };
+
+    let updatedFormTarget = {
+      ...updatedForm[id]
+    };
+
+    updatedFormTarget.value = e.target.value;
+    updatedForm[id] = updatedFormTarget;
+
+    console.log(id);
+
+    this.setState({
+      orderForm: updatedForm
+    })
   }
 
   orderHandler (e) {
     e.preventDefault();
-    console.log(this.props.ingredients);
+
     this.setState({
       loading: true
     });
 
+    let formData = {};
+
+    for (let formDataId in this.state.orderForm) {
+      formData[formDataId] = this.state.orderForm[formDataId].value
+    }
+
+    console.log(formData, 'formdata')
+
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price,
-      customer: {
-        name: 'Jeff C',
-        address: {
-          street: '123 testtest',
-          zipCode: '48823',
-          country: 'USA'
-        },
-        email: 'test@gmail.com'
-      },
-      delieverMethod: 'fastest'
+      orderData: formData
     };
 
     axios
@@ -57,12 +124,25 @@ class ContactData extends React.Component {
   }
 
   render() {
+    let formElementsArray = [];
+    for (let key in this.state.orderForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.orderForm[key]
+      })
+    }
+
+
     let form = (
-        <form>
-          <input className={style.Input} type="text" name="name" placeholder="Name"/>
-          <input className={style.Input} type="email" name="email" placeholder="email"/>
-          <input className={style.Input} type="text" name="street" placeholder="Street"/>
-          <input className={style.Input} type="text" name="postalCode" placeholder="postalCode"/>
+        <form onSubmit={this.orderHandler}>
+          {formElementsArray.map((formElement) => {
+            return <Input elementType={formElement.config.elementType} 
+                          elementConfig={formElement.config.elementConfig}
+                          value={formElement.config.value}
+                          key={formElement.id}
+                          id={formElement.id}
+                          change={this.handleInputChange}/>
+          })}
           <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
       </form>
     );
