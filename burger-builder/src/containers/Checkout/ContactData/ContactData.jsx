@@ -78,7 +78,8 @@ class ContactData extends React.Component {
                 {value: 'fatest', displayValue: 'Fastest'},
                 {value: 'cheapest', displayValue: 'Cheapest'}
               ]
-            }, 
+            },
+            validation: {},
             value: 'fatest'
           }
 
@@ -178,6 +179,7 @@ class ContactData extends React.Component {
                           value={formElement.config.value}
                           key={formElement.id}
                           id={formElement.id}
+                          shouldValidate={formElement.config.validation}
                           invalid={!formElement.config.valid}
                           change={this.handleInputChange}/>
           })}
