@@ -17,7 +17,7 @@ class BurgerBuilder extends Component {
     this.state = {
       // ingredients: null,
       // totalPrice: 3,
-      purchasable: false,
+      // purchasable: false,
       purchasing: false,
       loading: false
     }
@@ -50,9 +50,7 @@ class BurgerBuilder extends Component {
                 .reduce((pre, cur) => {
                   return pre + cur;
                 }, 0);
-    this.setState({
-      purchasable: sum > 0
-    });
+    return sum > 0;
   }
 
   // handleAddIngredient(type) {
@@ -147,7 +145,7 @@ class BurgerBuilder extends Component {
                   handleAddIngredient={this.props.onIngredientAdded}
                   handleRemoveIngredient={this.props.onIngredientRemoved}
                   handlePurchase={this.handlePurchase}
-                  purchasable={this.state.purchasable} 
+                  purchasable={this.updatePurchaseStatus(this.props.ings)} 
                   />
         </Aux>
       );
