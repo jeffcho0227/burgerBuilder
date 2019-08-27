@@ -9,10 +9,7 @@ import * as actions from '../../store/actions/index.js';
 class Checkout extends React.Component {
   constructor(props) {
     super(props);
-    // this.state={
-    //   ingredients: null,
-    //   price: 0
-    // }
+
     this.checkoutCancelledHandler = this.checkoutCancelledHandler.bind(this);
     this.checkoutContinuedHandler = this.checkoutContinuedHandler.bind(this);
   }
@@ -34,10 +31,6 @@ class Checkout extends React.Component {
   //     totalPrice: price
   //   })
   // }
-
-  componentWillMount () {
-    this.props.onInitPurchase();
-  }
 
 
   checkoutCancelledHandler() {
@@ -80,10 +73,10 @@ const mapStateToProps = (state) => {
   }
 } 
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onInitPurchase: () => dispatch(actions.purchaseInit())
-  }
-}
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onInitPurchase: () => dispatch(actions.purchaseInit())
+//   }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
+export default connect(mapStateToProps)(Checkout);
