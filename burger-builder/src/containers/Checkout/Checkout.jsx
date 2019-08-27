@@ -35,7 +35,7 @@ class Checkout extends React.Component {
   //   })
   // }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.onInitPurchase();
   }
 
@@ -52,8 +52,9 @@ class Checkout extends React.Component {
   render() {
     let summary = <Redirect to="/"/>
     if (this.props.ings) {
-      console.log(this.props.purcahsed, 'in if statement');
-      const purchasedRedirect = this.props.purchased ? <Redirect to="/auth" /> : null;
+      const purchasedRedirect = this.props.purchased ? <Redirect to="/" /> : null;
+      console.log(this.props.purchased, this.props, 'if statement purchased status')
+      console.log(purchasedRedirect, 'in if statement');
       summary = (
         <div>
           {purchasedRedirect}
@@ -75,7 +76,7 @@ class Checkout extends React.Component {
 const mapStateToProps = (state) => {
   return {
     ings: state.burgerBuilder.ingredients,
-    purcahsed: state.order.purchased
+    purchased: state.order.purchased
   }
 } 
 
