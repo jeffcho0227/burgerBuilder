@@ -3,6 +3,9 @@ import React from 'react';
 import style from './Auth.css';
 import Input from '../../components/UI/Input/Input.jsx';
 import Button from '../../components/UI/Button/Button.jsx';
+import * as actions from '../../store/actions/index.js';
+import { connect } from 'react-redux';
+
 
 class Auth extends React.Component {
   constructor() {
@@ -41,8 +44,13 @@ class Auth extends React.Component {
     }
     this.checkValidity = this.checkValidity.bind(this);
     this.inputChangedHandler = this.inputChangedHandler.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
+  submitHandler(e) {
+    e.preventDefault();
+    this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+  }
   
 
   checkValidity(value, rules) {
@@ -59,6 +67,7 @@ class Auth extends React.Component {
     return isValid;
   }
 
+
   inputChangedHandler(event, controlName) {
     const updatedControls = {
       ...this.state.controls,
@@ -68,6 +77,9 @@ class Auth extends React.Component {
         valid: this.checkValidity(event.target.value, this.state.controls[controlName])
       }
     }
+    this.setState({
+      controls: updatedControls
+    })
   }
 
   render() {
@@ -88,7 +100,7 @@ class Auth extends React.Component {
                 id={formElement.id}
                 shouldValidate={formElement.config.validation}
                 invalid={!formElement.config.valid}
-                change={this.handleInputChange}
+                change={this.inputChangedHandler}
                 
                 />
     })
@@ -97,13 +109,25 @@ class Auth extends React.Component {
 
     return(
       <div className={style.Auth}>
-        <form>
+        <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="Success">Submit</Button>
         </form>
       </div>
     )
-  }
-}
+  };
+};
 
-export default Auth;
+// const mapStateToProps = state => {
+//   return {
+    
+//   };
+// };
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuth: (email, password) => dispatch(actions.auth(email, password))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Auth);

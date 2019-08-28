@@ -120,8 +120,6 @@ class ContactData extends React.Component {
     updatedFormTarget.valid = this.checkValidity(updatedFormTarget.value, updatedFormTarget.validation)
     updatedForm[id] = updatedFormTarget;
 
-    console.log(updatedFormTarget);
-
     this.setState({
       orderForm: updatedForm
     })

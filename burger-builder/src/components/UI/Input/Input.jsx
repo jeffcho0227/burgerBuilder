@@ -4,11 +4,9 @@ import style from './Input.css';
 const Input = ( props ) => {
   let inputElement = null;
   const inputClass = [style.InputElement];
-  console.log(props.invalid);
+  console.log(props.change, 'testing');
 
   if (props.invalid && props.shouldValidate) {
-    console.log('here')
-    console.log(style.invalid)
     inputClass.push(style.Invalid);
   }
 
