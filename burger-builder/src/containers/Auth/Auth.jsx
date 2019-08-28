@@ -5,6 +5,7 @@ import Input from '../../components/UI/Input/Input.jsx';
 import Button from '../../components/UI/Button/Button.jsx';
 import * as actions from '../../store/actions/index.js';
 import { connect } from 'react-redux';
+import Spinner from '../../components/UI/Spinner/Spinner.jsx';
 
 
 class Auth extends React.Component {
@@ -99,7 +100,7 @@ class Auth extends React.Component {
       });
     }
 
-    const form = formElementsArray.map(formElement => {
+    let form = formElementsArray.map(formElement => {
       return <Input 
                 key={formElement.id}
                 elementType={formElement.config.elementType} 
@@ -113,6 +114,18 @@ class Auth extends React.Component {
                 />
     })
 
+    if (this.props.loading) {
+      form = <Spinner />;
+    }
+
+    let errorMessage = null;
+  
+    if (this.props.error) {
+      errorMessage = ( 
+        <p>{this.props.error}</p>
+        )
+    }
+
     
 
     return(
@@ -124,16 +137,18 @@ class Auth extends React.Component {
         <Button 
           clicked={this.switchAuthModeHandler}
           btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
+          { errorMessage }
       </div>
     )
   };
 };
 
-// const mapStateToProps = state => {
-//   return {
-    
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading, 
+    error: state.auth.error
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -141,4 +156,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
