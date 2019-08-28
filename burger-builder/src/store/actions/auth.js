@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes.js';
 import axios from 'axios';
-import URL from '../../apiKey/firbaseApiKey.js';
+import apiKey from '../../apiKey/firbaseApiKey.js';
 
 export const authStart = () => {
   return {
@@ -22,7 +22,7 @@ export const authFail = (error) => {
   };  
 };
 
-export const auth = (email, password) => {
+export const auth = (email, password, isSignup) => {
   return dispatch => {
     dispatch(authStart());
     let authData = {
@@ -30,8 +30,10 @@ export const auth = (email, password) => {
       password: password,
       returnSecureToken: true
     };
-    console.log(authData)
-    
+    let URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`
+    if (!isSignup) {
+      URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`;
+    }
     axios.post(URL, authData)
       .then(res => {
         console.log(res);
